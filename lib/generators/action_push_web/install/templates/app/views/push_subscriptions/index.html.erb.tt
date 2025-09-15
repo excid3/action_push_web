@@ -1,0 +1,2 @@
+<h1>Push Notification Subscriptions</h1>
+<%%= render partial: "push_subscriptions/push_subscription", as: :push_subscription, collection: @push_subscriptions %>

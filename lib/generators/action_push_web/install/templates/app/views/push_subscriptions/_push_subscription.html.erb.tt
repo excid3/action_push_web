@@ -1,0 +1,5 @@
+<%%= tag.div dom_id(push_subscription) do %>
+  <div><%%= push_subscription.browser %> <%%= push_subscription.version %> on <%%= push_subscription.platform %></div>
+  <div><small><%%= push_subscription.endpoint %></small></div>
+  <%%= button_to "Delete", push_subscription_path(push_subscription), method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+<%% end %>

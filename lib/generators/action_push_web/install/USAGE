@@ -1,0 +1,10 @@
+Description:
+    Installs action push web
+
+Example:
+    bin/rails generate action_push_web:install
+
+    This will perform the following:
+        Adds action_push_web migrations
+        Adds push subscriptions controller
+        Adds notifications Stimulus controller

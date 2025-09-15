@@ -1,0 +1,13 @@
+<h1>Action Push Web</h1>
+
+<%= tag.div data: {
+  controller: :notifications,
+  notifications_subscriptions_url_value: push_subscriptions_path,
+  notifications_vapid_public_key_value: ActionPushWeb.vapid_public_key
+} do %>
+  <button class="btn" data-action="click->notifications#attemptToSubscribe">
+    Notifications
+  </button>
+<% end %>
+
+<%= link_to "Push Subscriptions", push_subscriptions_path %>
