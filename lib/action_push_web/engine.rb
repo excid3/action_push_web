@@ -16,7 +16,7 @@ module ActionPushWeb
 
     config.after_initialize do
       ActionPushWeb.pool ||= Pool.new(invalid_subscription_handler: config.action_push_web.invalid_subscription_handler)
-      at_exit { config.action_push_web.pool.shutdown }
+      at_exit { ActionPushWeb.pool.shutdown }
     end
   end
 end
