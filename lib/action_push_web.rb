@@ -11,19 +11,27 @@ loader.ignore("#{__dir__}/tasks")
 loader.setup
 
 module ActionPushWeb
-  def self.vapid_identification
-    {
-      subject: Rails.application.config.action_push_web.subject,
-      public_key: vapid_public_key,
-      private_key: vapid_private_key
-    }
-  end
+  mattr_accessor :pool
 
-  def self.vapid_private_key
-    ENV.fetch("VAPID_PRIVATE_KEY", Rails.application.credentials.dig(:vapid, :private_key))
-  end
+  class << self
+    def vapid_identification
+      {
+        subject: Rails.application.config.action_push_web.subject,
+        public_key: vapid_public_key,
+        private_key: vapid_private_key
+      }
+    end
 
-  def self.vapid_public_key
-    ENV.fetch("VAPID_PUBLIC_KEY", Rails.application.credentials.dig(:vapid, :public_key))
+    def vapid_private_key
+      ENV.fetch("VAPID_PRIVATE_KEY", Rails.application.credentials.dig(:action_web_push, :vapid_private_key))
+    end
+
+    def vapid_public_key
+      ENV.fetch("VAPID_PUBLIC_KEY", Rails.application.credentials.dig(:action_web_push, :vapid_public_key))
+    end
+
+    def queue(payload, subscriptions)
+      pool.queue(payload, subscriptions)
+    end
   end
 end

@@ -30,6 +30,23 @@ Or environment variables:
 - `VAPID_PUBLIC_KEY`
 - `VAPID_PRIVATE_KEY`
 
+## Sending Notifications
+
+You can send notifications to one subscription or many using the pool.
+
+### Sending to a single subscription
+
+```ruby
+Current.user.push_subscriptions.notification(title: "Hello world")
+```
+
+### Sending to many subscriptions
+
+```ruby
+subscriptions = ActionPushWeb::Subscription.all
+ActionPushWeb.queue({title: "Hello world"}, subscriptions)
+```
+
 ## Debugging
 
 Ensure that your operating system settings allow notifications for your browser.
