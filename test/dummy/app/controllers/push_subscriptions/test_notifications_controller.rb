@@ -1,4 +1,4 @@
-class Users::PushSubscriptions::TestNotificationsController < ApplicationController
+class PushSubscriptions::TestNotificationsController < ApplicationController
   before_action :set_push_subscription
 
   def create
