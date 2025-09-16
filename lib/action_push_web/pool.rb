@@ -36,7 +36,7 @@ class ActionPushWeb::Pool
 
     def deliver(notification, id)
       notification.deliver(connection: connection)
-    rescue WebPush::ExpiredSubscription, OpenSSL::OpenSSLError => ex
+    rescue WebPush::ExpiredSubscription, OpenSSL::OpenSSLError
       invalidate_subscription_later(id) if invalid_subscription_handler
     end
 

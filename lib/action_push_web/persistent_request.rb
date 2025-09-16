@@ -14,7 +14,7 @@ module ActionPushWeb::PersistentRequest
     req.body = body
 
     if http.is_a?(Net::HTTP::Persistent)
-      response = http.request uri, req
+      resp = http.request uri, req
     else
       resp = http.request(req)
       verify_response(resp)
