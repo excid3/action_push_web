@@ -6,7 +6,7 @@ module ActionPushWeb
 
     config.action_push_web = ActiveSupport::OrderedOptions.new
     config.action_push_web.invalid_subscription_handler = ->(subscription_id) do
-      Rails.application.executo.wrap do
+      Rails.application.executor.wrap do
         Rails.logger.info "Destroying Action Push Web subscription: #{subscription_id}"
         ActionPushWeb::Subscription.destroy_by(id: subscription_id)
       end
