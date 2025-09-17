@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ActionPushWeb::Subscription < ApplicationRecord
-  belongs_to :owner, polymorphic: true
+  belongs_to :owner, polymorphic: true, optional: true
 
   delegate :browser, :platform, :version, to: :parsed_user_agent
 
