@@ -31,7 +31,7 @@ class ActionPushWeb::Pool
       delivery_pool.post do
         deliver(notification, subscription_id)
       rescue Exception => e
-        Rails.logger.error "Error in WebPush::Pool.deliver: #{e.class} #{e.message}"
+        Rails.logger.error "Error in ActionPushWeb::Pool.deliver: #{e.class} #{e.message}"
       end
     rescue Concurrent::RejectedExecutionError
     end
@@ -46,7 +46,7 @@ class ActionPushWeb::Pool
       invalidation_pool.post do
         invalid_subscription_handler.call(id)
       rescue Exception => e
-        Rails.logger.error "Error in WebPush::Pool.invalid_subscription_handler: #{e.class} #{e.message}"
+        Rails.logger.error "Error in ActionPushWeb::Pool.invalid_subscription_handler: #{e.class} #{e.message}"
       end
     end
 

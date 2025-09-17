@@ -14,14 +14,22 @@ class ActionPushWeb::InstallGenerator < Rails::Generators::Base
     template "app/views/push_subscriptions/_push_subscription.html.erb"
   end
 
-  def add_association
-    inject_into_class "app/models/#{options[:user_model].underscore}.rb", options[:user_model] do
-      "  has_many :push_subscriptions, class_name: \"ActionPushWeb::Subscription\", dependent: :delete_all\n"
-    end
-  end
-
   def add_route
     route "resources :push_subscriptions"
+  end
+
+  def add_association
+    association = "  has_many :push_subscriptions, class_name: \"ActionPushWeb::Subscription\", dependent: :delete_all\n"
+
+    if ::File.exist?("app/models/#{options[:user_model].underscore}.rb")
+      inject_into_class "app/models/#{options[:user_model].underscore}.rb", association, options[:user_model]
+    else
+      say <<~MESSAGE
+        Add the following association to your User model.
+
+          #{association}
+      MESSAGE
+    end
   end
 
   def vapid_key_config

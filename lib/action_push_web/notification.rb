@@ -2,27 +2,34 @@
 
 module ActionPushWeb
   class Notification
-    def initialize(title:, endpoint:, p256dh_key:, auth_key:, body: nil, path: nil, badge: nil, icon: nil, urgency: :normal)
-      @title, @body, @icon, @path, @badge = title, body, icon, path, badge
-      @endpoint, @p256dh_key, @auth_key = endpoint, p256dh_key, auth_key
-      @icon, @urgency = icon, urgency
+    def initialize(endpoint:, p256dh_key:, auth_key:, title:, **options)
+      @endpoint = endpoint
+      @p256dh_key = p256dh_key
+      @auth_key = auth_key
+      @payload = build_payload(title, options)
     end
 
     def deliver(connection: nil)
       Request.new(
-        message: encoded_message,
+        message: JSON.generate(@payload),
         endpoint: @endpoint,
         p256dh: @p256dh_key,
         auth: @auth_key,
         vapid: ActionPushWeb.vapid_identification,
         connection: connection,
-        urgency: @urgency
       ).perform
     end
 
     private
-      def encoded_message
-        JSON.generate title: @title, options: { body: @body, icon: @icon, data: { path: @path, badge: @badge } }.compact
+
+      # https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification#parameters
+      def build_payload(title, options)
+        # Merge badge and path into data
+        badge = options.delete(:badge)
+        path = options.delete(:path)
+        data = (options.delete(:data) || {}).merge(badge: badge, path: path).compact
+
+        { title: title, options: options.merge(data: data).compact }
       end
   end
 end

@@ -1,6 +1,30 @@
 # frozen_string_literal: true
 
 module ActionPushWeb
+  class Error < RuntimeError; end
+
+  class ResponseError < Error
+    attr_reader :response, :host
+
+    def initialize(response, host)
+      @response = response
+      @host = host
+      super "host: #{host}, #{@response.inspect}\nbody:\n#{@response.body}"
+    end
+  end
+
+  class InvalidSubscription < ResponseError; end
+
+  class ExpiredSubscription < ResponseError; end
+
+  class Unauthorized < ResponseError; end
+
+  class PayloadTooLarge < ResponseError; end
+
+  class TooManyRequests < ResponseError; end
+
+  class PushServiceError < ResponseError; end
+
   class Request
     DEFAULT_EXPIRATION = 12.hours.to_i
     DEFAULTS = {
@@ -10,11 +34,11 @@ module ActionPushWeb
 
     attr_reader :options, :payload, :uri, :vapid_options
 
-    def initialize(**options)
-      @uri ||= URI.parse(options.delete(:endpoint))
+    def initialize(endpoint:, message:, vapid:, **options)
       @options = options.with_defaults(DEFAULTS)
-      @vapid_options = @options.delete(:vapid)
-      @payload = encrypt(@options.delete(:message))
+      @payload = encrypt(message)
+      @uri = URI.parse(endpoint)
+      @vapid_options = vapid
     end
 
     def perform
@@ -102,27 +126,13 @@ module ActionPushWeb
       prk = OpenSSL::KDF.hkdf(
         server.dh_compute_key(client_public_key),
         salt: Base64.urlsafe_decode64(auth),
-        info: "WebPush: info\0" + client_public_key_bn.to_s(2) + server_public_key_bn.to_s(2),
+        info: "ActionPushWeb: info\0" + client_public_key_bn.to_s(2) + server_public_key_bn.to_s(2),
         hash: hash,
         length: 32
       )
 
-      content_encryption_key = OpenSSL::KDF.hkdf(
-        prk,
-        salt: salt,
-        info: "Content-Encoding: aes128gcm\0",
-        hash: hash,
-        length: 16
-      )
-
-      nonce = OpenSSL::KDF.hkdf(
-        prk,
-        salt: salt,
-        info: "Content-Encoding: nonce\0",
-        hash: hash,
-        length: 12
-      )
-
+      content_encryption_key = OpenSSL::KDF.hkdf(prk, salt: salt, info: "Content-Encoding: aes128gcm\0", hash: hash, length: 16)
+      nonce = OpenSSL::KDF.hkdf(prk, salt: salt, info: "Content-Encoding: nonce\0", hash: hash, length: 12)
       ciphertext = encrypt_text(message, key: content_encryption_key, nonce: nonce)
 
       serverkey16bn = convert16bit(server_public_key_bn)
