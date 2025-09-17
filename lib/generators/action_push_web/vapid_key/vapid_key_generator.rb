@@ -6,7 +6,7 @@ class ActionPushWeb::VapidKeyGenerator < Rails::Generators::Base
   class_option :subject, type: :string, default: "mailto:user@example.org"
 
   def generate_vapid_key
-    vapid_key = WebPush.generate_key
+    vapid_key = ActionPushWeb.generate_vapid_key
     say <<~MESSAGE
       Add the following to config/push.yml:
 

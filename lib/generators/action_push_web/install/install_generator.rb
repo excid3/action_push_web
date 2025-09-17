@@ -29,12 +29,13 @@ class ActionPushWeb::InstallGenerator < Rails::Generators::Base
       generate "action_push_web:vapid_key"
     else
       template "config/push.yml"
+      say "Edit config/push.yml to set the contact URI subject for VAPID"
     end
   end
 
   private
 
   def vapid_key
-    @vapid_key ||= WebPush.generate_key
+    @vapid_key ||= ActionPushWeb.generate_vapid_key
   end
 end

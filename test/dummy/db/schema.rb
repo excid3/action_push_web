@@ -12,8 +12,8 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_09_15_165616) do
   create_table "action_push_web_subscriptions", force: :cascade do |t|
-    t.string "user_type", null: false
-    t.integer "user_id", null: false
+    t.string "owner_type", null: false
+    t.integer "owner_id", null: false
     t.string "endpoint"
     t.string "p256dh_key"
     t.string "auth_key"
@@ -21,7 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_165616) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index [ "endpoint", "p256dh_key", "auth_key" ], name: "idx_on_endpoint_p256dh_key_auth_key_76a5629fdf"
-    t.index [ "user_type", "user_id" ], name: "index_action_push_web_subscriptions_on_user"
+    t.index [ "owner_type", "owner_id" ], name: "index_action_push_web_subscriptions_on_user"
   end
 
   create_table "sessions", force: :cascade do |t|

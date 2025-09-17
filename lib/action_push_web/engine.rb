@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActionPushWeb
   class Engine < ::Rails::Engine
     isolate_namespace ActionPushWeb
@@ -8,10 +10,6 @@ module ActionPushWeb
         Rails.logger.info "Destroying Action Push Web subscription: #{subscription_id}"
         ActionPushWeb::Subscription.destroy_by(id: subscription_id)
       end
-    end
-
-    initializer "action_push_web.request" do
-      WebPush::Request.prepend PersistentRequest
     end
 
     config.after_initialize do

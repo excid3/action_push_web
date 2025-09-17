@@ -32,18 +32,18 @@ You can send notifications to one subscription or many using the pool.
 ### Sending to a single subscription
 
 ```ruby
-Current.user.push_subscriptions.notification(title: "Hello world")
+push_subscription = Current.user.push_subscriptions.last
+push_subscription.notification(title: "Hello world", body: Random.uuid, path: notifications_path)
 ```
 
 ### Sending to many subscriptions
 
 ```ruby
-subscriptions = ActionPushWeb::Subscription.all
-ActionPushWeb.queue({title: "Hello world"}, subscriptions)
+push_subscriptions = ActionPushWeb::Subscription.all
+ActionPushWeb.queue({ title: "Hello world", body: Random.uuid, path: notifications}, push_subscriptions)
 ```
 
 ## Debugging
-
 Ensure that your operating system settings allow notifications for your browser.
 
 ## Contributing
@@ -51,3 +51,6 @@ Contribution directions go here.
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Credits
+This library is based on [pushpad/web-push](https://github.com/pushpad/web-push)

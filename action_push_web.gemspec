@@ -23,7 +23,9 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 8.0.2.1"
-  spec.add_dependency "web-push", ">= 3.0.0"
+  spec.add_dependency "base64", ">= 0.3.0"
+  spec.add_dependency "jwt", "~> 3.0"
+  spec.add_dependency "openssl", "~> 3.0"
   spec.add_dependency "net-http-persistent", ">= 4.0.0"
   spec.add_dependency "concurrent-ruby", ">= 1.3.0"
 end

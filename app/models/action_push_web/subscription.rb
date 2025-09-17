@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActionPushWeb::Subscription < ApplicationRecord
   belongs_to :owner, polymorphic: true
 

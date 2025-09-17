@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActionPushWeb::Pool
   attr_reader :delivery_pool, :invalidation_pool, :connection, :invalid_subscription_handler
 
