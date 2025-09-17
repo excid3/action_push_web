@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require "action_push_web/version"
 require "action_push_web/engine"
 
 require "concurrent"
 require "net/http/persistent"
 require "web-push"
+require "zeitwerk"
 
 loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
 loader.ignore("#{__dir__}/generators")
@@ -15,19 +18,9 @@ module ActionPushWeb
 
   class << self
     def vapid_identification
-      {
-        subject: Rails.application.config.action_push_web.subject,
-        public_key: vapid_public_key,
-        private_key: vapid_private_key
-      }
-    end
-
-    def vapid_private_key
-      ENV.fetch("VAPID_PRIVATE_KEY", Rails.application.credentials.dig(:action_web_push, :vapid_private_key))
-    end
-
-    def vapid_public_key
-      ENV.fetch("VAPID_PUBLIC_KEY", Rails.application.credentials.dig(:action_web_push, :vapid_public_key))
+      config = Rails.application.config_for(:push).dig(:web, :vapid)
+      raise "ActionPushWeb: 'web' platform is not configured with VAPID. Run `bin/rails generate action_push_web:vapid_key` to configure it." unless config.present?
+      config
     end
 
     def queue(payload, subscriptions)

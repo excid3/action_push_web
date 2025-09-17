@@ -23,4 +23,18 @@ class ActionPushWeb::InstallGenerator < Rails::Generators::Base
   def add_route
     route "resources :push_subscriptions"
   end
+
+  def vapid_key_config
+    if ::File.exist?("config/push.yml")
+      generate "action_push_web:vapid_key"
+    else
+      template "config/push.yml"
+    end
+  end
+
+  private
+
+  def vapid_key
+    @vapid_key ||= WebPush.generate_key
+  end
 end

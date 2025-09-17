@@ -1,5 +1,5 @@
 class ActionPushWeb::Subscription < ApplicationRecord
-  belongs_to :user, polymorphic: true
+  belongs_to :owner, polymorphic: true
 
   delegate :browser, :platform, :version, to: :parsed_user_agent
 

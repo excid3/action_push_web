@@ -4,7 +4,6 @@ self.addEventListener("push", async (event) => {
 })
 
 async function showNotification({ title, options }) {
-  console.log(self.registration, title, options)
   return self.registration.showNotification(title, options)
 }
 

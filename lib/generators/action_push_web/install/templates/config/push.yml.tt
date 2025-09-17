@@ -1,0 +1,7 @@
+shared:
+  web:
+    vapid:
+      # Subject is a contact URI for the application server. Either a "mailto:" or an "https:" address
+      subject: mailto:user@example.org
+      public_key: <%= vapid_key.public_key %>
+      private_key: <%= vapid_key.private_key %>

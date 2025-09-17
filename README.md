@@ -6,29 +6,24 @@ Action Push Web is a Rails web push notification gem for PWAs.
 
 ```bash
 bundle add action_push_web
-bin/rails g action_push_web:install
 bin/rails action_push_web:install:migrations
 bin/rails db:migrate
+bin/rails g action_push_web:install
 ```
 
-Generate a VAPID key:
+## Configuration
 
-```bash
-bin/rails action_push_web:generate_vapid_key
-```
-
-Add the key to your Rails credentials
+To load VAPID details from ENV or Rails credentials, use ERB in `config/push.yml`.
 
 ```yaml
-vapid:
-  public_key: x
-  private_key: y
+# config/push.yml
+shared:
+  web:
+    vapid:
+      subject: <%= ENV["VAPID_SUBJECT"] || Rails.application.credentials.dig(:vapid, :subject) %>
+      public_key: <%= ENV["VAPID_PUBLIC_KEY"] || Rails.application.credentials.dig(:vapid, :public_key) %>
+      private_key: <%= ENV["VAPID_PRIVATE_KEY"] || Rails.application.credentials.dig(:vapid, :private_key) %>
 ```
-
-Or environment variables:
-
-- `VAPID_PUBLIC_KEY`
-- `VAPID_PRIVATE_KEY`
 
 ## Sending Notifications
 

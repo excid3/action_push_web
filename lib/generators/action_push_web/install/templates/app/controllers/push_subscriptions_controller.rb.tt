@@ -16,7 +16,7 @@ class PushSubscriptionsController < ApplicationController
 
   def destroy
     @push_subscriptions.destroy_by(id: params[:id])
-    redirect_to user_push_subscriptions_url
+    redirect_to push_subscriptions_url
   end
 
   private
