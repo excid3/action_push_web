@@ -44,7 +44,7 @@ module ActionPushWeb
     def proxy_options
       return [] unless @options[:proxy]
       proxy_uri = URI.parse(@options[:proxy])
-      [proxy_uri.host, proxy_uri.port, proxy_uri.user, proxy_uri.password]
+      [ proxy_uri.host, proxy_uri.port, proxy_uri.user, proxy_uri.password ]
     end
 
     def headers
@@ -76,7 +76,7 @@ module ActionPushWeb
       elsif response.is_a?(Net::HTTPNotFound) # 404
         raise InvalidSubscription.new(response, uri.host)
       elsif response.is_a?(Net::HTTPUnauthorized) || response.is_a?(Net::HTTPForbidden) || # 401, 403
-            response.is_a?(Net::HTTPBadRequest) && response.message == 'UnauthorizedRegistration' # 400, Google FCM
+            response.is_a?(Net::HTTPBadRequest) && response.message == "UnauthorizedRegistration" # 400, Google FCM
         raise Unauthorized.new(response, uri.host)
       elsif response.is_a?(Net::HTTPRequestEntityTooLarge) # 413
         raise PayloadTooLarge.new(response, uri.host)
@@ -129,7 +129,7 @@ module ActionPushWeb
       rs = ciphertext.bytesize
       raise ArgumentError, "encrypted payload is too big" if rs > 4096
 
-      aes128gcmheader = "#{salt}" + [rs].pack('N*') + [serverkey16bn.bytesize].pack('C*') + serverkey16bn
+      aes128gcmheader = "#{salt}" + [ rs ].pack("N*") + [ serverkey16bn.bytesize ].pack("C*") + serverkey16bn
       aes128gcmheader + ciphertext
     end
 
@@ -144,7 +144,7 @@ module ActionPushWeb
     end
 
     def convert16bit(key)
-      [key.to_s(16)].pack('H*')
+      [ key.to_s(16) ].pack("H*")
     end
   end
 end
