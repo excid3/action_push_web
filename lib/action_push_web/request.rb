@@ -126,7 +126,7 @@ module ActionPushWeb
       prk = OpenSSL::KDF.hkdf(
         server.dh_compute_key(client_public_key),
         salt: Base64.urlsafe_decode64(auth),
-        info: "ActionPushWeb: info\0" + client_public_key_bn.to_s(2) + server_public_key_bn.to_s(2),
+        info: "WebPush: info\0" + client_public_key_bn.to_s(2) + server_public_key_bn.to_s(2),
         hash: hash,
         length: 32
       )
