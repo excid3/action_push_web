@@ -5,3 +5,4 @@ class NavigationTest < ActionDispatch::IntegrationTest
     assert Rails.application.present?
   end
 end
+
