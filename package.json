@@ -1,0 +1,9 @@
+{
+  "name": "action_push_web",
+  "module": "app/assets/javascripts/components/action_push_web.js",
+  "type": "module",
+  "scripts": {
+    "build": "bun run bun.config.js"
+  },
+  "dependencies": {}
+}

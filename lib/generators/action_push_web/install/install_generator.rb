@@ -7,7 +7,6 @@ class ActionPushWeb::InstallGenerator < Rails::Generators::Base
   class_option :current_user, type: :string, default: "Current.user"
 
   def copy_files
-    template "app/javascript/controllers/notifications_controller.js"
     template "app/controllers/push_subscriptions_controller.rb"
     template "app/views/pwa/service-worker.js"
     template "app/views/push_subscriptions/index.html.erb"

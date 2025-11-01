@@ -102,6 +102,58 @@ ActionPushWeb.queue({
 }, push_subscriptions)
 ```
 
+## Frontend
+
+On the frontend, there are 3 custom HTML elements that can be accessed via helpers.
+
+The first is when the user has not yet granted permission to send notifications.
+
+You can use what ever HTML you want inside these components. Once the user either grants or denies
+permission the component will hide itself.
+
+```erb
+<%= ask_for_web_notifications do %>
+  <div class="text-blue">Request permission</div>
+<% end %>
+```
+
+If a user denies permission to send notifications:
+
+```erb
+<%= when_web_notifications_disabled do %>
+  <div class="text-red">Notifications aren’t allowed</div>
+<% end %>
+```
+
+And if a user grants permission to send notifications,
+it accepts an `href` attribute to be passed to the helper that points to a create
+action that handles creating a push subscription. By default it points to, `push_subscriptions_path`. It
+also accepts a `service_worker_url` attribute that points to the service worker.
+By default it points to `pwa_service_worker_path(format: :js)`
+
+```erb
+<%= when_web_notifications_allowed class: "text-green" do %>
+  Notifications are allowed
+<% end %>
+```
+
+You can alternatively create a custom controller that handles creating a push subscription:
+
+```ruby
+class CustomPushSubscriptionsController < ActionPushWeb::SubscriptionsController
+  private
+    def push_subscription_params
+      super.merge(owner: Current.user)
+    end
+end
+```
+
+```erb
+<%= ask_for_web_notifications(href: custom_push_subscriptions_path) do %>
+  <div class="text-blue">Request permission</div>
+<% end %>
+```
+
 ## Debugging
 Ensure that your operating system settings allow notifications for your browser.
 
