@@ -22,7 +22,7 @@ class ActionPushWeb::InstallGenerator < Rails::Generators::Base
     association = "  has_many :push_subscriptions, class_name: \"ActionPushWeb::Subscription\", dependent: :delete_all\n"
 
     if ::File.exist?("app/models/#{options[:user_model].underscore}.rb")
-      inject_into_class "app/models/#{options[:user_model].underscore}.rb", association, options[:user_model]
+      inject_into_class "app/models/#{options[:user_model].underscore}.rb", options[:user_model], association
     else
       say <<~MESSAGE
         Add the following association to your User model.
